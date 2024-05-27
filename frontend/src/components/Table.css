@@ -1,0 +1,36 @@
+table {
+    color: white;
+    margin: 2rem 0;
+    margin-top: 3rem;
+    border-spacing: 0px;
+    width: 100%;
+    align-self: center;
+    justify-self: center;
+}
+
+tr {
+    vertical-align: baseline;
+}
+
+.dataRows:hover {
+    background-color: rgb(56, 56, 56);
+}
+
+th {
+    color: rgb(170, 170, 170);
+    border-top: 1px solid rgb(56, 56, 56);
+    text-transform: uppercase;
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+td {
+    font-size: 0.875rem;
+    text-align: left;
+}
+
+td, th {
+    border-bottom: 1px solid rgb(56, 56, 56);
+    padding: 0.3rem;
+}
