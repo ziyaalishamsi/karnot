@@ -1,0 +1,13 @@
+.App {
+  background-color: rgb(18, 18, 18);
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.AppBody {
+  width: auto;
+  background-color: rgb(27, 27, 27);
+  display: block;
+  border-radius: 7px;
+  padding: 2rem;
+}

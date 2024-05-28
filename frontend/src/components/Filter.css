@@ -1,0 +1,29 @@
+.filterBox {
+    display: inline-flex;
+    border: 1px solid rgb(75, 75, 75);
+    border-radius: 3px;
+}
+
+.filterBtn, .filterBtn--selected {
+    appearance: auto;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(255, 255, 255);
+    background-color: rgb(27, 27, 27);
+    cursor: pointer;
+    height: 32px;
+    padding-left: 16px;
+    padding-right: 16px;
+    line-height: 1;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(75, 75, 75);
+}
+
+.filterBtn:hover {
+    background-color: rgb(56, 56, 56);
+}
+
+.filterBtn--selected {
+    background-color: rgb(75, 75, 75);
+}
