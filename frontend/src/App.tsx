@@ -1,19 +1,17 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
 import './App.css';
-import Table from './components/Table';
-import Filter from './components/Filter';
-import Header from './components/Header';
+import Home from './home/Home';
+import Transaction from './transaction/Transaction';
 
 const App: React.FC = () => {
-  return (
-    <div className="App">
-      <div className='AppBody'>
-        <Header />
-        <Filter />
-        <Table />
-      </div>
-    </div>
-  );
+  return <Router>
+    <Routes>
+      <Route path='/' Component={Home} />
+      <Route path='/tx/:txId' Component={Transaction} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  </Router>
 }
 
 export default App;

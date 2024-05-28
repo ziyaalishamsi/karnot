@@ -21,6 +21,6 @@ app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
     res.status(err.status || 500).json({ message: err.message || 'An unknown error occured.'})
 })
 
-app.listen(8000, '127.0.0.1', () => {
+app.listen(8000, () => {
     console.log('My server is running on port 8000')
 })
