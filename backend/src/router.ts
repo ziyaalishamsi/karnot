@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from 'express'
 import { Block, BlockData, HttpError, Transaction, TransactionData } from './models'
 import { MongoClient } from 'mongodb'
 import { BLOCKS, DB_NAME, MONGO_CONNECT_STRING, TRANSACTIONS } from './env'
-import { getBlockData, getETHPrice, getLatestBlockNumber, getTransactionData } from './utilities'
+import { getBlockData, getETHPrice, getFee, getGasConsumed, getLatestBlockNumber, getTransactionData } from './utilities'
 
 const router = Router()
 
@@ -22,21 +22,14 @@ router.put('/', async (req: Request, res: Response, next: NextFunction) => {
 
         blockData.transactions.forEach(async (t, index) => {
             const transactionData: TransactionData = await getTransactionData(t)
-            console.log(transactionData)
             const newTransaction: Transaction = {
                 hash: t.transaction_hash,
                 type: t.type,
                 timestamp: blockData.timestamp,
                 block_number: blockData.block_number,
-                actual_fee: {
-                    eth: parseInt(transactionData.actual_fee.amount) / 1000000000000000000,
-                    dollar: parseInt(transactionData.actual_fee.amount) * ethPrice / 1000000000000000000
-                },
-                max_fee: {
-                    eth: parseInt(t.max_fee) / 1000000000000000000,
-                    dollar: parseInt(t.max_fee) * ethPrice / 1000000000000000000
-                },
-                gas_consumed: parseInt(transactionData.actual_fee.amount) / parseInt(blockData.l1_gas_price.price_in_wei),
+                actual_fee: getFee(transactionData.actual_fee.amount, transactionData.actual_fee.unit, blockData.l1_gas_price, ethPrice),
+                max_fee: t.max_fee ? getFee(t.max_fee, transactionData.actual_fee.unit, blockData.l1_gas_price, ethPrice) : null,
+                gas_consumed: getGasConsumed(transactionData.actual_fee.amount, transactionData.actual_fee.unit, blockData.l1_gas_price),
                 sender_address: t.sender_address,
                 nonce: parseInt(t.nonce),
                 position: index,
@@ -48,6 +41,7 @@ router.put('/', async (req: Request, res: Response, next: NextFunction) => {
                 finality_status: transactionData.finality_status,   
                 events: transactionData.events.length
             }
+
             const client = new MongoClient(MONGO_CONNECT_STRING)
             await client.connect()
             const db = client.db(DB_NAME)
@@ -64,6 +58,7 @@ router.put('/', async (req: Request, res: Response, next: NextFunction) => {
                 version: parseInt(t.version)
             })
         })
+
         const client = new MongoClient(MONGO_CONNECT_STRING)
         await client.connect()
         const db = client.db(DB_NAME)

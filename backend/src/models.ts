@@ -32,7 +32,7 @@ export interface Transaction {
     max_fee: {
         eth: number
         dollar: number
-    }
+    } | null
     gas_consumed: number
     sender_address: string
     nonce: number

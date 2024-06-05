@@ -50,3 +50,24 @@ export const getETHPrice: () => Promise<number> = async () => {
     const ethPriceData = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd')
     return (await ethPriceData.json()).ethereum.usd as number
 }
+
+export const getFee = (fee: string, unit: 'FRI' | 'WEI', price: { price_in_fri: string, price_in_wei: string }, ethPrice: number) => {
+    const converter = Math.pow(10, 18)
+    const res = { eth: 0, dollar: 0 }
+    if (unit == 'WEI') {
+        res.eth = parseInt(fee) / converter
+        res.dollar = parseInt(fee) * ethPrice / converter
+    } else {
+        res.eth = parseInt(fee) / converter
+        res.dollar = ethPrice * parseInt(fee) * parseInt(price.price_in_fri) / (parseInt(price.price_in_wei) * converter)
+    }
+    return res
+}
+
+export const getGasConsumed = (fee: string, unit: 'FRI' | 'WEI', price : { price_in_fri: string, price_in_wei: string }) => {
+    let res
+    if (unit == 'WEI') res = parseInt(fee) / parseInt(price.price_in_wei)
+    else res = parseInt(fee) / parseInt(price.price_in_fri)
+
+    return res
+}
